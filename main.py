@@ -1,6 +1,7 @@
 """
 AI Image Detector Backend - Single File FastAPI Server
 Integrates with TruthScan API for AI image detection
+Python 3.11 Compatible Version
 """
 
 import os
@@ -12,13 +13,12 @@ import random
 from pathlib import Path
 from typing import Optional, Dict, Any
 
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Header
+from fastapi import FastAPI, UploadFile, File, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 from supabase import create_client, Client as SupabaseClient
 import requests
-import uvicorn
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -45,7 +45,7 @@ app.add_middleware(
 )
 
 # Global Supabase client
-supabase: SupabaseClient = None
+supabase: Optional[SupabaseClient] = None
 
 
 # ============================================================================
@@ -525,6 +525,7 @@ async def global_exception_handler(request, exc):
     )
 
 if __name__ == "__main__":
+    import uvicorn
     uvicorn.run(
         app,
         host="0.0.0.0",
