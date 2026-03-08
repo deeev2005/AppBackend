@@ -399,8 +399,9 @@ async def health_check():
     }
 
 @app.get("/ping")
+@app.head("/ping")
 async def ping():
-    """Ping endpoint for cron jobs"""
+    """Ping endpoint for cron jobs - supports both GET and HEAD requests"""
     return "OK"
 
 @app.post("/api/register-device")
