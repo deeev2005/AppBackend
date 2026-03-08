@@ -12,6 +12,8 @@ import time
 import random
 from pathlib import Path
 from typing import Optional, Dict, Any
+from datetime import datetime
+import pytz
 
 from fastapi import FastAPI, UploadFile, File, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
@@ -386,10 +388,20 @@ async def startup_event():
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
+    # Get current time in IST
+    ist_tz = pytz.timezone('Asia/Kolkata')
+    ist_time = datetime.now(ist_tz)
+    
     return {
-        "status": "healthy",
+        "status": "ok",
+        "timeIST": ist_time.strftime('%d/%m/%Y, %I:%M:%S %p'),
         "supabase_ready": supabase is not None
     }
+
+@app.get("/ping")
+async def ping():
+    """Ping endpoint for cron jobs"""
+    return "OK"
 
 @app.post("/api/register-device")
 async def register_device(request: dict):
